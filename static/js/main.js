@@ -1,5 +1,10 @@
 // main.js — students will add JavaScript here as features are built
 
+document.querySelectorAll('.toast').forEach(function (toast) {
+    setTimeout(function () { toast.classList.add('hide'); }, 3000);
+    setTimeout(function () { toast.remove(); }, 3400);
+});
+
 (function () {
     const modal   = document.getElementById('video-modal');
     const openBtn = document.getElementById('open-video-modal');

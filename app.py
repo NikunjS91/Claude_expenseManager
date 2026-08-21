@@ -1,8 +1,10 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect, url_for, session
+from werkzeug.security import generate_password_hash
 
 from database.db import get_db, init_db, seed_db
 
 app = Flask(__name__)
+app.secret_key = "spendly-dev-secret"  # TODO: move to env var before production
 
 with app.app_context():
     init_db()
@@ -18,9 +20,40 @@ def landing():
     return render_template("landing.html")
 
 
-@app.route("/register")
+@app.route("/register", methods=["GET", "POST"])
 def register():
-    return render_template("register.html")
+    if request.method == "GET":
+        return render_template("register.html")
+
+    name     = request.form.get("name",     "").strip()
+    email    = request.form.get("email",    "").strip()
+    password = request.form.get("password", "").strip()
+
+    if not name:
+        return render_template("register.html", error="Name is required.")
+    if not email:
+        return render_template("register.html", error="Email is required.")
+    if len(password) < 8:
+        return render_template("register.html", error="Password must be at least 8 characters.")
+
+    conn = get_db()
+    existing = conn.execute("SELECT id FROM users WHERE email = ?", (email,)).fetchone()
+    if existing:
+        conn.close()
+        return render_template("register.html", error="An account with that email already exists.")
+
+    password_hash = generate_password_hash(password)
+    conn.execute(
+        "INSERT INTO users (name, email, password_hash) VALUES (?, ?, ?)",
+        (name, email, password_hash),
+    )
+    conn.commit()
+    new_id = conn.execute("SELECT last_insert_rowid()").fetchone()[0]
+    conn.close()
+
+    session["user_id"]   = new_id
+    session["user_name"] = name
+    return redirect(url_for("profile"))
 
 
 @app.route("/login")

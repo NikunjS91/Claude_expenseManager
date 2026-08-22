@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block title %}Profile — Spendly{% endblock %}
+
+{% block content %}
+<div class="profile-page">
+
+    <!-- Section 1: User info card -->
+    <div class="profile-header">
+        <div class="profile-header-card">
+            <div class="profile-avatar">{{ user.name[0] }}</div>
+            <div class="profile-meta">
+                <h2 class="profile-name">{{ user.name }}</h2>
+                <p class="profile-email">{{ user.email }}</p>
+                <p class="profile-since">Member since {{ user.created_at }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 2: Stats row -->
+    <div class="profile-stat-row">
+        <div class="profile-stat-card">
+            <span class="profile-stat-label">Total Spent</span>
+            <span class="profile-stat-value">{{ stats.total }}</span>
+        </div>
+        <div class="profile-stat-card">
+            <span class="profile-stat-label">Transactions</span>
+            <span class="profile-stat-value">{{ stats.count }}</span>
+        </div>
+        <div class="profile-stat-card">
+            <span class="profile-stat-label">Top Category</span>
+            <span class="profile-stat-value profile-stat-value--text">{{ stats.top_cat }}</span>
+        </div>
+    </div>
+
+    <!-- Section 3: Two-column grid -->
+    <div class="profile-grid">
+
+        <!-- Left: transaction table -->
+        <div class="profile-main">
+            <h3 class="section-title">Recent Transactions</h3>
+            <table class="tx-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Description</th>
+                        <th>Category</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for tx in transactions %}
+                    <tr>
+                        <td>{{ tx.date }}</td>
+                        <td>{{ tx.description }}</td>
+                        <td><span class="cat-badge cat-badge--{{ tx.category | lower }}">{{ tx.category }}</span></td>
+                        <td class="tx-amount">{{ tx.amount }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Right: category breakdown -->
+        <div class="profile-sidebar">
+            <h3 class="section-title">By Category</h3>
+            {% for cat in categories %}
+            <div class="cat-row">
+                <div class="cat-row-header">
+                    <span class="cat-row-name">{{ cat.name }}</span>
+                    <span class="cat-row-total">{{ cat.total }}</span>
+                </div>
+                <div class="cat-bar-track">
+                    <div class="cat-bar cat-bar--{{ cat.name | lower }}" data-width="{{ cat.pct }}"></div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+
+    <!-- Section 4: Add Expense CTA -->
+    <div class="profile-cta">
+        <a href="{{ url_for('add_expense') }}" class="btn-primary">+ Add Expense</a>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.querySelectorAll('.cat-bar[data-width]').forEach(function(el) {
+    el.style.width = el.dataset.width + '%';
+});
+</script>
+{% endblock %}

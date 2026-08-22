@@ -28,6 +28,14 @@
     --radius-sm: 6px;
     --radius-md: 12px;
     --radius-lg: 20px;
+
+    --cat-food-bg: #d8f3dc;           --cat-food-fg: #1b4332;
+    --cat-transport-bg: #dbeafe;      --cat-transport-fg: #1e3a5f;
+    --cat-bills-bg: #fef9c3;          --cat-bills-fg: #713f12;
+    --cat-health-bg: #fce7f3;         --cat-health-fg: #831843;
+    --cat-entertainment-bg: #ede9fe;  --cat-entertainment-fg: #4c1d95;
+    --cat-shopping-bg: #fdf3e3;       --cat-shopping-fg: #92400e;
+    --cat-other-bg: #f1f5f9;          --cat-other-fg: #334155;
 }
 
 /* ------------------------------------------------------------------ */
@@ -608,4 +616,234 @@ a { color: inherit; text-decoration: none; }
 @media (max-width: 600px) {
     .nav-links a:not(.nav-cta) { display: none; }
     .hero { padding: 3rem 1rem 2rem; }
+}
+
+/* ------------------------------------------------------------------ */
+/* Profile page                                                        */
+/* ------------------------------------------------------------------ */
+
+.profile-page {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 2.5rem 2rem 4rem;
+}
+
+/* User info card */
+
+.profile-header { margin-bottom: 1.5rem; }
+
+.profile-header-card {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    background: var(--paper-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1.75rem 2rem;
+}
+
+.profile-avatar {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--paper-card);
+    font-family: var(--font-display);
+    font-size: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.profile-name {
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    line-height: 1.1;
+    color: var(--ink);
+}
+
+.profile-email {
+    font-size: 0.9rem;
+    color: var(--ink-muted);
+    margin-top: 0.25rem;
+}
+
+.profile-since {
+    font-size: 0.8rem;
+    color: var(--ink-faint);
+    margin-top: 0.15rem;
+}
+
+/* Stats row */
+
+.profile-stat-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.profile-stat-card {
+    background: var(--paper-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1.5rem 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.profile-stat-label {
+    font-size: 0.78rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-muted);
+}
+
+.profile-stat-value {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    line-height: 1;
+    color: var(--ink);
+}
+
+.profile-stat-value--text { font-size: 1.4rem; }
+
+/* Two-column grid */
+
+.profile-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.profile-main,
+.profile-sidebar {
+    background: var(--paper-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1.75rem;
+}
+
+.section-title {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    color: var(--ink);
+    margin-bottom: 1.25rem;
+}
+
+/* Transaction table */
+
+.tx-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+}
+
+.tx-table th {
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ink-muted);
+    text-align: left;
+    padding: 0 0.75rem 0.75rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.tx-table td {
+    padding: 0.75rem;
+    border-bottom: 1px solid var(--border-soft);
+    color: var(--ink-soft);
+}
+
+.tx-table tbody tr:last-child td { border-bottom: none; }
+
+.tx-amount {
+    text-align: right;
+    font-weight: 500;
+    color: var(--ink);
+}
+
+/* Category badges */
+
+.cat-badge {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 500;
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    letter-spacing: 0.02em;
+}
+
+.cat-badge--food          { background: var(--cat-food-bg);          color: var(--cat-food-fg); }
+.cat-badge--transport     { background: var(--cat-transport-bg);     color: var(--cat-transport-fg); }
+.cat-badge--bills         { background: var(--cat-bills-bg);         color: var(--cat-bills-fg); }
+.cat-badge--health        { background: var(--cat-health-bg);        color: var(--cat-health-fg); }
+.cat-badge--entertainment { background: var(--cat-entertainment-bg); color: var(--cat-entertainment-fg); }
+.cat-badge--shopping      { background: var(--cat-shopping-bg);      color: var(--cat-shopping-fg); }
+.cat-badge--other         { background: var(--cat-other-bg);         color: var(--cat-other-fg); }
+
+/* Category breakdown sidebar */
+
+.cat-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-bottom: 1rem;
+}
+
+.cat-row:last-child { margin-bottom: 0; }
+
+.cat-row-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.82rem;
+}
+
+.cat-row-name  { font-weight: 500; color: var(--ink-soft); }
+.cat-row-total { color: var(--ink-muted); }
+
+.cat-bar-track {
+    height: 6px;
+    background: var(--border-soft);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.cat-bar {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 999px;
+    width: 0;
+    transition: width 0.6s ease;
+}
+
+.cat-bar--bills         { background: var(--accent-2); }
+.cat-bar--health        { background: var(--danger); }
+.cat-bar--transport     { background: var(--cat-transport-fg); }
+.cat-bar--entertainment { background: var(--cat-entertainment-fg); }
+.cat-bar--other         { background: var(--ink-faint); }
+
+/* Add Expense CTA */
+
+.profile-cta {
+    text-align: center;
+    padding: 1rem 0;
+}
+
+/* Profile responsive */
+
+@media (max-width: 768px) {
+    .profile-header-card {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .profile-stat-row { grid-template-columns: 1fr; }
+
+    .profile-grid { grid-template-columns: 1fr; }
 }

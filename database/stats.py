@@ -1,0 +1,32 @@
+from database.db import get_db
+
+
+def get_summary_stats(user_id):
+    conn = get_db()
+    try:
+        cursor = conn.execute(
+            "SELECT amount, category FROM expenses WHERE user_id = ?",
+            (user_id,)
+        )
+        rows = cursor.fetchall()
+    finally:
+        conn.close()
+
+    count = len(rows)
+
+    if count == 0:
+        return {"total": "₹0.00", "count": 0, "top_cat": "—"}
+
+    total = sum(row["amount"] for row in rows)
+
+    category_totals = {}
+    for row in rows:
+        cat = row["category"]
+        category_totals[cat] = category_totals.get(cat, 0) + row["amount"]
+    top_cat = max(category_totals, key=category_totals.get)
+
+    return {
+        "total": f"₹{total:,.2f}",
+        "count": count,
+        "top_cat": top_cat,
+    }

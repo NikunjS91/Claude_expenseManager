@@ -1,16 +1,23 @@
 from database.db import get_db
 
 
-def get_category_breakdown(user_id):
+def get_category_breakdown(user_id, date_from=None, date_to=None):
     conn = get_db()
     try:
-        cursor = conn.execute(
-            "SELECT category, SUM(amount) AS cat_total "
-            "FROM expenses WHERE user_id = ? "
-            "GROUP BY category ORDER BY cat_total DESC",
-            (user_id,)
-        )
-        rows = cursor.fetchall()
+        if date_from and date_to:
+            rows = conn.execute(
+                "SELECT category, SUM(amount) AS cat_total "
+                "FROM expenses WHERE user_id = ? AND date BETWEEN ? AND ? "
+                "GROUP BY category ORDER BY cat_total DESC",
+                (user_id, date_from, date_to)
+            ).fetchall()
+        else:
+            rows = conn.execute(
+                "SELECT category, SUM(amount) AS cat_total "
+                "FROM expenses WHERE user_id = ? "
+                "GROUP BY category ORDER BY cat_total DESC",
+                (user_id,)
+            ).fetchall()
     finally:
         conn.close()
 

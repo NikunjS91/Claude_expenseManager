@@ -1,14 +1,20 @@
 from database.db import get_db
 
 
-def get_summary_stats(user_id):
+def get_summary_stats(user_id, date_from=None, date_to=None):
     conn = get_db()
     try:
-        cursor = conn.execute(
-            "SELECT amount, category FROM expenses WHERE user_id = ?",
-            (user_id,)
-        )
-        rows = cursor.fetchall()
+        if date_from and date_to:
+            rows = conn.execute(
+                "SELECT amount, category FROM expenses "
+                "WHERE user_id = ? AND date BETWEEN ? AND ?",
+                (user_id, date_from, date_to)
+            ).fetchall()
+        else:
+            rows = conn.execute(
+                "SELECT amount, category FROM expenses WHERE user_id = ?",
+                (user_id,)
+            ).fetchall()
     finally:
         conn.close()
 

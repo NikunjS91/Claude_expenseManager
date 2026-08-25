@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta, date
+
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -9,6 +11,14 @@ from database.queries import (
 
 app = Flask(__name__)
 app.secret_key = "spendly-dev-secret"  # TODO: move to env var before production
+
+
+def parse_date(val):
+    try:
+        datetime.strptime(val, "%Y-%m-%d")
+        return val
+    except (ValueError, TypeError):
+        return None
 
 with app.app_context():
     init_db()
@@ -111,13 +121,51 @@ def profile():
         session.clear()
         return redirect(url_for("login"))
 
-    stats        = get_summary_stats(uid)
-    transactions = get_recent_transactions(uid, limit=10)
-    categories   = get_category_breakdown(uid)
+    today     = date.today()
+    today_str = today.strftime("%Y-%m-%d")
+
+    date_from = parse_date(request.args.get("date_from", ""))
+    date_to   = parse_date(request.args.get("date_to", ""))
+
+    if bool(date_from) != bool(date_to):
+        flash("Please provide both a start and end date.", "error")
+        date_from = date_to = None
+    elif date_from and date_to and date_from > date_to:
+        flash("Start date must be before end date.", "error")
+        date_from = date_to = None
+
+    first_of_month   = today.replace(day=1).strftime("%Y-%m-%d")
+    three_months_ago = (today - timedelta(days=90)).strftime("%Y-%m-%d")
+    six_months_ago   = (today - timedelta(days=180)).strftime("%Y-%m-%d")
+
+    preset_dates = {
+        "this_month": {"date_from": first_of_month,   "date_to": today_str},
+        "3m":         {"date_from": three_months_ago,  "date_to": today_str},
+        "6m":         {"date_from": six_months_ago,    "date_to": today_str},
+    }
+
+    if date_from is None and date_to is None:
+        active_preset = "all"
+    elif date_from == first_of_month and date_to == today_str:
+        active_preset = "this_month"
+    elif date_from == three_months_ago and date_to == today_str:
+        active_preset = "3m"
+    elif date_from == six_months_ago and date_to == today_str:
+        active_preset = "6m"
+    else:
+        active_preset = "custom"
+
+    stats        = get_summary_stats(uid, date_from=date_from, date_to=date_to)
+    transactions = get_recent_transactions(uid, limit=10, date_from=date_from, date_to=date_to)
+    categories   = get_category_breakdown(uid, date_from=date_from, date_to=date_to)
 
     return render_template("profile.html",
         user=user, stats=stats,
-        transactions=transactions, categories=categories)
+        transactions=transactions, categories=categories,
+        date_from=date_from or "", date_to=date_to or "",
+        active_preset=active_preset,
+        preset_dates=preset_dates,
+    )
 
 
 @app.route("/expenses/add")

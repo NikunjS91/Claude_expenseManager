@@ -835,6 +835,87 @@ a { color: inherit; text-decoration: none; }
     padding: 1rem 0;
 }
 
+/* Period filter bar */
+
+.period-filter {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    padding: 0.75rem 1rem;
+    background: var(--paper-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+}
+
+.period-filter__presets {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.period-filter__link {
+    padding: 0.3rem 0.85rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--ink-muted);
+    border: 1px solid var(--border);
+    transition: background 0.15s, color 0.15s;
+}
+
+.period-filter__link:hover {
+    background: var(--accent-light);
+    color: var(--accent);
+    border-color: var(--accent-light);
+}
+
+.period-filter__link.is-active {
+    background: var(--accent);
+    color: var(--paper-card);
+    border-color: var(--accent);
+}
+
+.period-filter__custom {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-left: auto;
+}
+
+.period-filter__input {
+    padding: 0.3rem 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    background: var(--paper);
+    color: var(--ink);
+}
+
+.period-filter__sep {
+    font-size: 0.85rem;
+    color: var(--ink-muted);
+}
+
+.period-filter__apply {
+    padding: 0.3rem 0.85rem;
+    border: 1px solid var(--accent);
+    border-radius: var(--radius-sm);
+    background: var(--accent-light);
+    color: var(--accent);
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.period-filter__apply:hover {
+    background: var(--accent);
+    color: var(--paper-card);
+}
+
 /* Profile responsive */
 
 @media (max-width: 768px) {
@@ -846,4 +927,8 @@ a { color: inherit; text-decoration: none; }
     .profile-stat-row { grid-template-columns: 1fr; }
 
     .profile-grid { grid-template-columns: 1fr; }
+
+    .period-filter { flex-direction: column; align-items: stretch; }
+
+    .period-filter__custom { margin-left: 0; flex-wrap: wrap; }
 }

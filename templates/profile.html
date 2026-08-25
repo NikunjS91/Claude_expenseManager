@@ -17,6 +17,26 @@
         </div>
     </div>
 
+    <!-- Section 1.5: Date filter bar -->
+    <div class="period-filter">
+        <div class="period-filter__presets">
+            <a href="{{ url_for('profile') }}"
+               class="period-filter__link{% if active_preset == 'all' %} is-active{% endif %}">All Time</a>
+            <a href="{{ url_for('profile', date_from=preset_dates.this_month.date_from, date_to=preset_dates.this_month.date_to) }}"
+               class="period-filter__link{% if active_preset == 'this_month' %} is-active{% endif %}">This Month</a>
+            <a href="{{ url_for('profile', date_from=preset_dates['3m'].date_from, date_to=preset_dates['3m'].date_to) }}"
+               class="period-filter__link{% if active_preset == '3m' %} is-active{% endif %}">Last 3 Months</a>
+            <a href="{{ url_for('profile', date_from=preset_dates['6m'].date_from, date_to=preset_dates['6m'].date_to) }}"
+               class="period-filter__link{% if active_preset == '6m' %} is-active{% endif %}">Last 6 Months</a>
+        </div>
+        <form class="period-filter__custom" method="GET" action="{{ url_for('profile') }}">
+            <input type="date" name="date_from" value="{{ date_from }}" class="period-filter__input">
+            <span class="period-filter__sep">to</span>
+            <input type="date" name="date_to" value="{{ date_to }}" class="period-filter__input">
+            <button type="submit" class="period-filter__apply">Apply</button>
+        </form>
+    </div>
+
     <!-- Section 2: Stats row -->
     <div class="profile-stat-row">
         <div class="profile-stat-card">

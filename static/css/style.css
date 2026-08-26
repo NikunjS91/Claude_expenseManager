@@ -934,6 +934,280 @@ a { color: inherit; text-decoration: none; }
 }
 
 /* ------------------------------------------------------------------ */
+/* Add Expense page                                                    */
+/* ------------------------------------------------------------------ */
+
+.add-expense-page {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 2.5rem 2rem 4rem;
+}
+
+.ae-header {
+    margin-bottom: 2rem;
+}
+
+.ae-back {
+    display: inline-block;
+    font-size: 0.85rem;
+    color: var(--ink-muted);
+    margin-bottom: 0.75rem;
+    transition: color 0.2s;
+}
+
+.ae-back:hover { color: var(--accent); }
+
+.ae-title {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    color: var(--ink);
+    line-height: 1.1;
+    margin-bottom: 0.35rem;
+}
+
+.ae-subtitle {
+    font-size: 0.9rem;
+    color: var(--ink-muted);
+}
+
+/* Two-column layout */
+
+.ae-body {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 1.5rem;
+    align-items: start;
+}
+
+/* Form card */
+
+.ae-form-card {
+    background: var(--paper-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 2rem;
+}
+
+/* Amount field with ₹ prefix */
+
+.ae-amount-wrap {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--paper);
+    overflow: hidden;
+    transition: border-color 0.2s;
+}
+
+.ae-amount-wrap:focus-within { border-color: var(--accent); }
+
+.ae-amount-prefix {
+    padding: 0.6rem 0.75rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--ink-muted);
+    background: var(--paper-warm);
+    border-right: 1px solid var(--border);
+    flex-shrink: 0;
+    line-height: 1;
+}
+
+.ae-amount-input {
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    flex: 1;
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.ae-amount-input:focus { border-color: transparent; }
+
+/* Category fieldset reset */
+
+.ae-cat-fieldset {
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+.ae-cat-legend-label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--ink-soft);
+    margin-bottom: 0.4rem;
+}
+
+/* Category pill grid */
+
+.ae-cat-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.5rem;
+}
+
+.ae-cat-pill {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.45rem 0.5rem;
+    border-radius: var(--radius-sm);
+    border: 1.5px solid var(--border);
+    font-size: 0.82rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: center;
+    user-select: none;
+}
+
+.ae-cat-pill input[type="radio"] { display: none; }
+
+.ae-cat-pill--food          { color: var(--cat-food-fg); }
+.ae-cat-pill--transport     { color: var(--cat-transport-fg); }
+.ae-cat-pill--bills         { color: var(--cat-bills-fg); }
+.ae-cat-pill--health        { color: var(--cat-health-fg); }
+.ae-cat-pill--entertainment { color: var(--cat-entertainment-fg); font-size: 0.75rem; }
+.ae-cat-pill--shopping      { color: var(--cat-shopping-fg); }
+.ae-cat-pill--other         { color: var(--cat-other-fg); }
+
+.ae-cat-pill:hover,
+.ae-cat-pill:has(input:checked) {
+    border-color: transparent;
+}
+
+.ae-cat-pill--food:has(input:checked),
+.ae-cat-pill--food:hover          { background: var(--cat-food-bg); }
+.ae-cat-pill--transport:has(input:checked),
+.ae-cat-pill--transport:hover     { background: var(--cat-transport-bg); }
+.ae-cat-pill--bills:has(input:checked),
+.ae-cat-pill--bills:hover         { background: var(--cat-bills-bg); }
+.ae-cat-pill--health:has(input:checked),
+.ae-cat-pill--health:hover        { background: var(--cat-health-bg); }
+.ae-cat-pill--entertainment:has(input:checked),
+.ae-cat-pill--entertainment:hover { background: var(--cat-entertainment-bg); }
+.ae-cat-pill--shopping:has(input:checked),
+.ae-cat-pill--shopping:hover      { background: var(--cat-shopping-bg); }
+.ae-cat-pill--other:has(input:checked),
+.ae-cat-pill--other:hover         { background: var(--cat-other-bg); }
+
+/* Side-by-side date + description */
+
+.ae-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+/* Optional label */
+
+.ae-optional {
+    font-weight: 400;
+    color: var(--ink-faint);
+    font-size: 0.8rem;
+    margin-left: 0.25rem;
+}
+
+/* Submit button */
+
+.ae-submit {
+    width: 100%;
+    margin-top: 0.75rem;
+    padding: 0.8rem;
+    background: var(--accent);
+    color: var(--paper-card);
+    border: none;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.ae-submit:hover { background: var(--ink); }
+
+/* Right panel */
+
+.ae-side {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.ae-side-card {
+    background: var(--paper-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+}
+
+.ae-side-card--accent {
+    background: var(--accent-light);
+    border-color: transparent;
+}
+
+.ae-side-title {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    color: var(--ink);
+    margin-bottom: 1rem;
+}
+
+.ae-tips {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.ae-tips li {
+    font-size: 0.875rem;
+    color: var(--ink-muted);
+    line-height: 1.6;
+    padding-left: 1.1rem;
+    position: relative;
+}
+
+.ae-tips li::before {
+    content: "→";
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-size: 0.8rem;
+}
+
+.ae-side-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    margin-bottom: 0.75rem;
+}
+
+.ae-cat-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+}
+
+/* Responsive */
+
+@media (max-width: 900px) {
+    .ae-body { grid-template-columns: 1fr; }
+    .ae-side { display: none; }
+    .ae-cat-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 500px) {
+    .ae-cat-grid { grid-template-columns: repeat(2, 1fr); }
+    .ae-row { grid-template-columns: 1fr; }
+}
+
+/* ------------------------------------------------------------------ */
 /* Navbar active link                                                  */
 /* ------------------------------------------------------------------ */
 
@@ -1023,5 +1297,4 @@ a { color: inherit; text-decoration: none; }
     color: var(--ink-faint);
     font-style: italic;
     margin: 0;
-}
 }

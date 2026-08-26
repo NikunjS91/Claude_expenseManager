@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% block title %}Add Expense — Spendly{% endblock %}
+
+{% block content %}
+<div class="add-expense-page">
+
+  <!-- Page header -->
+  <div class="ae-header">
+    <div>
+      <a href="{{ url_for('profile') }}" class="ae-back">&#8592; Back to profile</a>
+      <h1 class="ae-title">Add Expense</h1>
+      <p class="ae-subtitle">Record a new transaction to your account</p>
+    </div>
+  </div>
+
+  <div class="ae-body">
+
+    <!-- Left: form -->
+    <div class="ae-form-card">
+      {% if error %}
+      <div class="auth-error">{{ error }}</div>
+      {% endif %}
+
+      <form method="POST" action="{{ url_for('add_expense') }}">
+
+        <!-- Amount -->
+        <div class="form-group">
+          <label for="amount">Amount</label>
+          <div class="ae-amount-wrap">
+            <span class="ae-amount-prefix">&#8377;</span>
+            <input type="number" id="amount" name="amount" class="form-input ae-amount-input"
+                   step="0.01" min="0.01" placeholder="0.00"
+                   value="{{ request.form.get('amount', '') }}" required>
+          </div>
+        </div>
+
+        <!-- Category pills -->
+        <div class="form-group">
+          <fieldset class="ae-cat-fieldset">
+            <legend class="ae-cat-legend-label">Category</legend>
+            <div class="ae-cat-grid">
+              {% for label, slug in categories %}
+              <label class="ae-cat-pill ae-cat-pill--{{ slug }}">
+                <input type="radio" name="category" value="{{ label }}"
+                       {% if request.form.get('category') == label %}checked{% endif %}>
+                <span>{{ label }}</span>
+              </label>
+              {% endfor %}
+            </div>
+          </fieldset>
+        </div>
+
+        <!-- Date + Description side by side -->
+        <div class="ae-row">
+          <div class="form-group">
+            <label for="date">Date</label>
+            <input type="date" id="date" name="date" class="form-input"
+                   value="{{ request.form.get('date', today) }}" required>
+          </div>
+
+          <div class="form-group">
+            <label for="description">
+              Description
+              <span class="ae-optional">(optional)</span>
+            </label>
+            <input type="text" id="description" name="description" class="form-input"
+                   maxlength="200" placeholder="e.g. Groceries at D-Mart"
+                   value="{{ request.form.get('description', '') }}">
+          </div>
+        </div>
+
+        <button type="submit" class="ae-submit">Add Expense</button>
+      </form>
+    </div>
+
+    <!-- Right: tips panel -->
+    <div class="ae-side">
+      <div class="ae-side-card">
+        <h3 class="ae-side-title">Quick tips</h3>
+        <ul class="ae-tips">
+          <li>Use today's date for new purchases.</li>
+          <li>Pick the category that best fits — you can check the breakdown on your profile.</li>
+          <li>A short description helps you remember what the expense was for.</li>
+        </ul>
+      </div>
+
+      <div class="ae-side-card ae-side-card--accent">
+        <p class="ae-side-label">Categories</p>
+        <div class="ae-cat-legend">
+          {% for label, slug in categories %}
+          <span class="cat-badge cat-badge--{{ slug }}">{{ label }}</span>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

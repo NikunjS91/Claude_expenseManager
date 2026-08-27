@@ -2,7 +2,7 @@ import math
 import os
 from datetime import datetime, timedelta, date
 
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, render_template, request, redirect, url_for, session, flash, abort
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from database.db import get_db, init_db, seed_db
@@ -81,6 +81,7 @@ def register():
     new_id = conn.execute("SELECT last_insert_rowid()").fetchone()[0]
     conn.close()
 
+    session.clear()
     session["user_id"]   = new_id
     session["user_name"] = name
     flash("Account created successfully! Welcome to Spendly.", "success")
@@ -109,6 +110,7 @@ def login():
     if user is None or not check_password_hash(user["password_hash"], password):
         return render_template("login.html", error="Invalid email or password.")
 
+    session.clear()
     session["user_id"]   = user["id"]
     session["user_name"] = user["name"]
     return redirect(url_for("profile"))
@@ -237,9 +239,69 @@ def add_expense():
     return redirect(url_for("profile"))
 
 
-@app.route("/expenses/<int:id>/edit")
-def edit_expense(id):
-    return "Edit expense — coming in Step 8"
+@app.route("/expenses/<int:expense_id>/edit", methods=["GET", "POST"])
+def edit_expense(expense_id):
+    if not session.get("user_id"):
+        return redirect(url_for("login"))
+
+    conn = get_db()
+    expense = conn.execute(
+        "SELECT * FROM expenses WHERE id = ? AND user_id = ?",
+        (expense_id, session["user_id"]),
+    ).fetchone()
+    conn.close()
+
+    if expense is None:
+        abort(404)
+
+    if request.method == "GET":
+        return render_template("edit_expense.html",
+            expense=expense,
+            categories=CATEGORIES,
+        )
+
+    amount_raw   = request.form.get("amount", "").strip()
+    category     = request.form.get("category", "").strip()
+    expense_date = request.form.get("date", "").strip()
+    description  = request.form.get("description", "").strip()[:200]
+
+    def fail(msg):
+        form_data = {
+            "id":          expense["id"],
+            "amount":      amount_raw,
+            "category":    category,
+            "date":        expense_date,
+            "description": description,
+        }
+        return render_template("edit_expense.html",
+            expense=form_data,
+            categories=CATEGORIES,
+            error=msg,
+        )
+
+    try:
+        amount = float(amount_raw)
+        if amount <= 0 or not math.isfinite(amount):
+            raise ValueError
+    except (ValueError, TypeError):
+        return fail("Amount must be a positive number.")
+
+    if category not in CATEGORY_NAMES:
+        return fail("Please select a valid category.")
+
+    if not parse_date(expense_date):
+        return fail("Please enter a valid date.")
+
+    conn = get_db()
+    conn.execute(
+        "UPDATE expenses SET amount=?, category=?, date=?, description=? WHERE id=? AND user_id=?",
+        (amount, category, expense_date, description or None, expense_id, session["user_id"]),
+    )
+    conn.commit()
+    conn.close()
+
+    flash("Expense updated successfully.", "success")
+    return redirect(url_for("profile"))
 
 
 @app.route("/expenses/<int:id>/delete")

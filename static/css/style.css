@@ -121,7 +121,8 @@ a { color: inherit; text-decoration: none; }
 
 .nav-cta:hover { background: var(--accent) !important; }
 
-.nav-user { color: var(--ink-muted); font-size: 0.9rem; }
+.nav-user { color: var(--ink-muted); font-size: 0.9rem; text-decoration: none; }
+.nav-user:hover { color: var(--ink); }
 
 .toast-container {
     position: fixed;
@@ -766,6 +767,21 @@ a { color: inherit; text-decoration: none; }
     text-align: right;
     font-weight: 500;
     color: var(--ink);
+}
+
+.tx-actions {
+    text-align: right;
+    white-space: nowrap;
+}
+
+.tx-edit-link {
+    font-size: 0.8rem;
+    color: var(--ink-muted);
+    text-decoration: none;
+}
+
+.tx-edit-link:hover {
+    color: var(--accent);
 }
 
 /* Category badges */

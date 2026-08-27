@@ -784,6 +784,20 @@ a { color: inherit; text-decoration: none; }
     color: var(--accent);
 }
 
+.tx-delete-btn {
+    font-size: 0.8rem;
+    color: var(--ink-muted);
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    margin-left: 0.5rem;
+}
+
+.tx-delete-btn:hover {
+    color: var(--danger);
+}
+
 /* Category badges */
 
 .cat-badge {
